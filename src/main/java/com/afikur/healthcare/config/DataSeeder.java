@@ -31,9 +31,9 @@ public class DataSeeder {
         Map<String, Role> rolesMap = createRoles(roleRepository, roleNames);
 
         List<User> users = Arrays.asList(
-                new User("Admin User", "admin@healthcare.com", "12345", Collections.singletonList(rolesMap.get("ROLE_ADMIN"))),
-                new User("Dr. Jessica", "doctor@healthcare.com", "12345", Collections.singletonList(rolesMap.get("ROLE_DOCTOR"))),
-                new User("Mary Cooper", "patient@healthcare.com", "12345", Collections.singletonList(rolesMap.get("ROLE_PATIENT")))
+                new User("Admin User", "admin@healthcare.com", "12345", true, Collections.singletonList(rolesMap.get("ROLE_ADMIN"))),
+                new User("Dr. Jessica", "doctor@healthcare.com", "12345", true, Collections.singletonList(rolesMap.get("ROLE_DOCTOR"))),
+                new User("Mary Cooper", "patient@healthcare.com", "12345", true, Collections.singletonList(rolesMap.get("ROLE_PATIENT")))
         );
 
         createUsersWithRoles(userRepository, passwordEncoder, users);

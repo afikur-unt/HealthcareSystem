@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en" layout:decorate="layout"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <title>Edit User</title>
+</head>
+<body>
+<main layout:fragment="content">
+    <div class="flex justify-center mt-10">
+        <div class="w-full max-w-md">
+            <h2 class="text-xl font-semibold text-center">Edit User</h2>
+            <form class="space-y-4" method="POST" th:action="@{/users/{id}(id=${user.id})}">
+
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300" for="name">Name</label>
+                    <input class="w-full p-2 border rounded-md" id="name" name="name" required
+                           th:value="${user.name}" type="text"/>
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300" for="email">Email</label>
+                    <input class="w-full p-2 border rounded-md" id="email" name="email" required
+                           th:value="${user.email}" type="email"/>
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Roles</label>
+                    <div class="space-y-2">
+                        <div th:each="role : ${roles}">
+                            <label>
+                                <input name="roles" th:checked="${user.roles.contains(role)}" th:value="${role.id}"
+                                       type="checkbox"/>
+                                <span th:text="${#strings.replace(role.name, 'ROLE_', '')}">Role Name</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-4 flex justify-between">
+                    <button class="w-full px-5 py-3 text-base font-medium text-center text-white bg-primary-700 rounded-lg hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 sm:w-auto dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                            type="submit">
+                        Activate/Update User
+                    </button>
+                    <a class="px-4 py-2 bg-gray-500 rounded-md hover:bg-gray-600 focus:outline-none"
+                       th:href="@{/users}">
+                        Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+</body>
+</html>

@@ -8,7 +8,7 @@
     <meta content="Fantastic Six" name="author">
     <meta content="Hugo 0.142.0" name="generator">
 
-    <title th:text="${title}">Healthcare System</title>
+    <title th:text="${title != null ? title : 'Healthcare System'}">Healthcare System</title>
 
     <link href="https://fonts.googleapis.com" rel="preconnect">
     <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
@@ -17,6 +17,10 @@
     <link href="/css/app.css" rel="stylesheet">
     <meta content="#ffffff" name="msapplication-TileColor">
     <meta content="#ffffff" name="theme-color">
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script th:src="@{/webjars/tinymce/7.2.1/tinymce.min.js}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 
     <script>
@@ -51,5 +55,6 @@
 
 <script src="/js/app.bundle.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.2/datepicker.min.js"></script>
+<script layout:fragment="script"></script>
 </body>
 </html>

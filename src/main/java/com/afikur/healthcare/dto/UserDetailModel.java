@@ -14,12 +14,15 @@ public class UserDetailModel implements UserDetails {
     private final String email;
     private final String name;
     private final String password;
+    private boolean enabled;
+
     private final List<GrantedAuthority> authorities;
 
     public UserDetailModel(User user) {
         this.email = user.getEmail();
         this.name = user.getName();
         this.password = user.getPassword();
+        this.enabled = user.isEnabled();
         this.authorities = user.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName()))
                 .collect(Collectors.toList());
@@ -61,7 +64,6 @@ public class UserDetailModel implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return enabled;
     }
-
 }

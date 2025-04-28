@@ -29,6 +29,9 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false)
+    private boolean enabled;
+
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(
             name = "user_roles",
@@ -37,10 +40,11 @@ public class User {
     )
     private List<Role> roles = new ArrayList<>();
 
-    public User(String name, String email, String password, List<Role> roles) {
+    public User(String name, String email, String password, boolean enabled, List<Role> roles) {
         this.name = name;
         this.email = email;
         this.password = password;
+        this.enabled = enabled;
         this.roles = roles;
     }
 }
