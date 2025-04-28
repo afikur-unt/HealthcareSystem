@@ -24,4 +24,6 @@ public class UserDto {
     private String email;
     @NotEmpty(message = "password should not be empty")
     private String password;
+
+    private boolean enabled;
 }

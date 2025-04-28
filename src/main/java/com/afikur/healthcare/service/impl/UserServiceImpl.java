@@ -6,6 +6,7 @@ import com.afikur.healthcare.model.User;
 import com.afikur.healthcare.repository.RoleRepository;
 import com.afikur.healthcare.repository.UserRepository;
 import com.afikur.healthcare.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -15,33 +16,27 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-    private UserRepository userRepository;
-    private RoleRepository roleRepository;
-    private PasswordEncoder passwordEncoder;
-
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) { //no need for one constructor to have @Autowired annotation.
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
+    private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public void saveUser(UserDto userDto) {
         User user = new User();
         user.setName(userDto.getName());
-        user.setEmail(userDto.getEmail());  //conversion of form data to jpa entity, here mapper won't work as userDto don't have common attributes with User.
-        user.setPassword(passwordEncoder.encode(userDto.getPassword())); // before setting the password we are encrypting using Bcrypt by Spring security.
-
-        //userRepository.save(user);
+        user.setEmail(userDto.getEmail());
+        user.setEnabled(true);
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
 
         Role role = roleRepository.findByName("ROLE_USER");
 
         if (role == null) {
             role = checkRoleExists();
         }
-        user.setRoles(Arrays.asList(role));   //As we have list of roles field in user checking any role in db exists or not if not creating by a private function and saving it in db
-        userRepository.save(user); // now saving user to db.
+        user.setRoles(Arrays.asList(role));
+        userRepository.save(user);
 
     }
 
@@ -53,20 +48,21 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserDto> findAllUsers() {
         List<User> users = userRepository.findAll();
-        List<UserDto> user_dto = new ArrayList<>();
+        List<UserDto> userDtoList = new ArrayList<>();
         for (User user : users) {
             UserDto userDto = new UserDto();
             userDto.setId(user.getId());
             userDto.setName(user.getName());
             userDto.setEmail(user.getEmail());
-            user_dto.add(userDto);
+            userDto.setEnabled(user.isEnabled());
+            userDtoList.add(userDto);
         }
-        return user_dto;
+        return userDtoList;
     }
 
     private Role checkRoleExists() {
         Role role = new Role();
-        role.setName("ROLE_ADMIN");
+        role.setName("ROLE_USER");
         return roleRepository.save(role);
     }
 }
