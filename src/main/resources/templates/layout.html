@@ -1,0 +1,55 @@
+<!doctype html>
+<html class="dark" lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <meta content="A test case management system" name="description">
+    <meta content="Fantastic Six" name="author">
+    <meta content="Hugo 0.142.0" name="generator">
+
+    <title th:text="${title}">Healthcare System</title>
+
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+          rel="stylesheet">
+    <link href="/css/app.css" rel="stylesheet">
+    <meta content="#ffffff" name="msapplication-TileColor">
+    <meta content="#ffffff" name="theme-color">
+
+
+    <script>
+
+        if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+    </script>
+</head>
+<body class="bg-gray-50 dark:bg-gray-800">
+
+<nav th:replace="fragments/header :: navbar"></nav>
+
+<div class="flex pt-16 overflow-hidden bg-gray-50 dark:bg-gray-900">
+
+    <th:block th:replace="fragments/sidebar :: sidebar"></th:block>
+
+    <div class="relative w-full h-full overflow-y-auto bg-gray-50 lg:ml-64 dark:bg-gray-900" id="main-content">
+        <div class="px-4 pt-6">
+            <main layout:fragment="content">
+                main content
+            </main>
+        </div>
+
+        <footer th:replace="fragments/footer :: footer"></footer>
+
+    </div>
+
+</div>
+
+<script src="/js/app.bundle.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.2/datepicker.min.js"></script>
+</body>
+</html>

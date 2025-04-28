@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<th:block th:fragment="footer">
+
+    <p class="my-10 text-sm text-center text-gray-500">
+        &copy; <span th:text="${#dates.year(#dates.createNow())}"></span> <a class="hover:underline" href="#">Fantastic Six</a>.
+        All rights reserved.
+    </p>
+</th:block>
+</body>
+</html>
