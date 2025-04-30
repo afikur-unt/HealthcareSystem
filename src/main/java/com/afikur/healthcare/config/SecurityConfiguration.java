@@ -25,7 +25,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class SecurityConfiguration {
 
-
+    private final CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -42,7 +42,8 @@ public class SecurityConfiguration {
                         .loginPage("/login")
                         .loginProcessingUrl("/login")
                         .failureUrl("/login?error")
-                        .defaultSuccessUrl("/dashboard", true)
+                        .successHandler(customAuthenticationSuccessHandler)
+//                        .defaultSuccessUrl("/dashboard", true)
                         .permitAll()
                 )
                 .rememberMe(rememberMe -> rememberMe
