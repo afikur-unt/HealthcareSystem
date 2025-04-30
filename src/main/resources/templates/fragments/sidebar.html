@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <body>
 <th:block th:fragment="sidebar">
     <aside aria-label="Sidebar"
@@ -21,7 +21,7 @@
                             </a>
                         </li>
 
-                        <li>
+                        <li sec:authorize="hasRole('DOCTOR')">
                             <button aria-controls="dropdown-crud"
                                     class="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700"
                                     data-collapse-toggle="dropdown-crud" type="button">
@@ -56,7 +56,7 @@
                             </ul>
                         </li>
 
-                        <li>
+                        <li sec:authorize="hasRole('ADMIN')">
                             <button aria-controls="dropdown-settings"
                                     class="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700"
                                     data-collapse-toggle="dropdown-settings" type="button">

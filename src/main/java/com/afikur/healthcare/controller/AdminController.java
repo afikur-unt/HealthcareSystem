@@ -19,6 +19,7 @@ public class AdminController {
         model.addAttribute("totalUsers", adminService.getTotalUsers());
         model.addAttribute("totalPatients", adminService.getTotalPatients());
         model.addAttribute("totalPrescriptions", adminService.getTotalPrescriptions());
+        model.addAllAttributes(adminService.getDashboardAnalytics());
         return "admin/dashboard";
     }
 }

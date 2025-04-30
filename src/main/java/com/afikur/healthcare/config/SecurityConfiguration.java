@@ -34,13 +34,15 @@ public class SecurityConfiguration {
                         .requestMatchers("/css/**", "/js/**", "/img/**", "/webjars/**").permitAll()
                         .requestMatchers("/login/**", "/register/**").permitAll()
                         .requestMatchers("/users").hasRole("ADMIN")
+                        .requestMatchers("/doctor/**").hasRole("DOCTOR")
+                        .requestMatchers("/dashboard/**").hasAnyRole("ADMIN", "DOCTOR")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
                         .loginProcessingUrl("/login")
                         .failureUrl("/login?error")
-                        .defaultSuccessUrl("/dashboard")
+                        .defaultSuccessUrl("/dashboard", true)
                         .permitAll()
                 )
                 .rememberMe(rememberMe -> rememberMe
