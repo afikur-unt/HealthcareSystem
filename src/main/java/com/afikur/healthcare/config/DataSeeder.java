@@ -1,7 +1,9 @@
 package com.afikur.healthcare.config;
 
+import com.afikur.healthcare.model.Patient;
 import com.afikur.healthcare.model.Role;
 import com.afikur.healthcare.model.User;
+import com.afikur.healthcare.repository.PatientRepository;
 import com.afikur.healthcare.repository.RoleRepository;
 import com.afikur.healthcare.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -10,22 +12,23 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.time.LocalDate;
 import java.util.*;
 
 @Configuration
 public class DataSeeder {
     @Bean
-    CommandLineRunner seedDatabase(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
+    CommandLineRunner seedDatabase(UserRepository userRepository, PatientRepository patientRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
         return new CommandLineRunner() {
             @Override
             @Transactional
             public void run(String... args) throws Exception {
-                DataSeeder.this.seedData(userRepository, roleRepository, passwordEncoder);
+                DataSeeder.this.seedData(userRepository, patientRepository, roleRepository, passwordEncoder);
             }
         };
     }
 
-    public void seedData(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
+    public void seedData(UserRepository userRepository, PatientRepository patientRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
         String[] roleNames = {"ROLE_ADMIN", "ROLE_DOCTOR", "ROLE_PATIENT"};
 
         Map<String, Role> rolesMap = createRoles(roleRepository, roleNames);
@@ -33,7 +36,7 @@ public class DataSeeder {
         List<User> users = Arrays.asList(
                 new User("Admin User", "admin@healthcare.com", "12345", true, Collections.singletonList(rolesMap.get("ROLE_ADMIN"))),
                 new User("Dr. Jessica", "doctor@healthcare.com", "12345", true, Collections.singletonList(rolesMap.get("ROLE_DOCTOR"))),
-                new User("Mary Cooper", "patient@healthcare.com", "12345", true, Collections.singletonList(rolesMap.get("ROLE_PATIENT")))
+                new User("Mary Cooper", "mary@healthcare.com", "12345", true, Collections.singletonList(rolesMap.get("ROLE_PATIENT")))
         );
 
         createUsersWithRoles(userRepository, passwordEncoder, users);
@@ -48,6 +51,7 @@ public class DataSeeder {
             }
         }
     }
+
 
     private static Map<String, Role> createRoles(RoleRepository roleRepository, String[] roleNames) {
         Map<String, Role> rolesMap = new HashMap<>();

@@ -3,6 +3,7 @@ package com.afikur.healthcare.config;
 import com.afikur.healthcare.dto.UserDetailModel;
 import com.afikur.healthcare.model.User;
 import com.afikur.healthcare.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,7 +22,10 @@ import java.util.Optional;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfiguration {
+
+
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

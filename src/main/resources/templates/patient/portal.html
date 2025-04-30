@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en" layout:decorate="layout"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <title>Dashboard</title>
+</head>
+<body>
+
+
+<main layout:fragment="content">
+    <div class="bg-white p-6 rounded-lg shadow">
+        <h2 class="text-2xl font-bold mb-4">Patient Portal - Prescription History</h2>
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Medications
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Issued
+                        Date
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Doctor
+                    </th>
+                </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                <tr th:each="prescription : ${prescriptions}">
+                    <td class="px-6 py-4">
+                        <ul>
+                            <li th:each="med : ${prescription.medications}"
+                                th:text="${med.name} + ' (' + ${med.dosage} + ')'"></li>
+                        </ul>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap" th:text="${prescription.issuedDate}"></td>
+                    <td class="px-6 py-4 whitespace-nowrap" th:text="${prescription.doctor.username}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+</body>
+</html>

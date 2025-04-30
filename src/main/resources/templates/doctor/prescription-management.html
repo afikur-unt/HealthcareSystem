@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en" layout:decorate="layout"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <title>Dashboard</title>
+</head>
+<body>
+
+
+<main layout:fragment="content">
+    <div class="bg-white p-6 rounded-lg shadow">
+        <h2 class="text-2xl font-bold mb-4">Prescription Management</h2>
+
+        <!-- Prescription Form -->
+        <form class="mb-6" method="post" th:action="@{/doctor/prescriptions}" th:object="${prescription}">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700" for="patient">Patient</label>
+                    <select class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" id="patient"
+                            th:field="*{patient.id}">
+                        <option th:each="patient : ${patients}" th:text="${patient.user.name}"
+                                th:value="${patient.id}"></option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700" for="issuedDate">Issued Date</label>
+                    <input class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" id="issuedDate" th:field="*{issuedDate}"
+                           type="date">
+                </div>
+            </div>
+
+            <!-- Medication List -->
+            <div class="mt-4" id="medication-list">
+                <div class="medication-entry grid grid-cols-1 md:grid-cols-2 gap-4 mb-2">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Medication</label>
+                        <input class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" name="medicationNames"
+                               type="text">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Dosage</label>
+                        <input class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" name="dosages"
+                               type="text">
+                        <button class="remove-medication mt-2 text-red-600 hover:text-red-800" style="display: none;"
+                                type="button">Remove
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <button class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+                    id="add-medication"
+                    type="button">
+                Add Medication
+            </button>
+
+
+            <button class="mt-4 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                    type="submit">
+                Save Prescription
+            </button>
+        </form>
+
+        <!-- Prescription List -->
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Patient
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Medications
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Issued
+                        Date
+                    </th>
+                </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                <tr th:each="prescription : ${prescriptions}">
+                    <td class="px-6 py-4 whitespace-nowrap" th:text="${prescription.patient.user.name}"></td>
+                    <td class="px-6 py-4">
+                        <ul>
+                            <li th:each="med : ${prescription.medications}"
+                                th:text="${med.name} + ' (' + ${med.dosage} + ')'"></li>
+                        </ul>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap" th:text="${prescription.issuedDate}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- JavaScript for Dynamic Medication Fields -->
+    <script>
+        document.getElementById('add-medication').addEventListener('click', function () {
+            const medicationList = document.getElementById('medication-list');
+            const newEntry = document.createElement('div');
+            newEntry.className = 'medication-entry grid grid-cols-1 md:grid-cols-2 gap-4 mb-2';
+            newEntry.innerHTML = `
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Medication</label>
+                        <input type="text" name="medicationNames" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Dosage</label>
+                        <input type="text" name="dosages" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                        <button type="button" class="remove-medication mt-2 text-red-600 hover:text-red-800">Remove</button>
+                    </div>
+                `;
+            medicationList.appendChild(newEntry);
+            updateRemoveButtons();
+        });
+
+        function updateRemoveButtons() {
+            const removeButtons = document.querySelectorAll('.remove-medication');
+            const medicationEntries = document.querySelectorAll('.medication-entry');
+            removeButtons.forEach(button => {
+                button.style.display = medicationEntries.length > 1 ? 'inline' : 'none';
+                button.onclick = function () {
+                    button.parentElement.parentElement.remove();
+                    updateRemoveButtons();
+                };
+            });
+        }
+
+        // Initialize remove buttons on page load
+        updateRemoveButtons();
+    </script>
+</main>
+</body>
+</html>

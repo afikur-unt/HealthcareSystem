@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en" layout:decorate="layout"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <title>Dashboard</title>
+</head>
+<body>
+
+
+<main layout:fragment="content">
+
+    <div class="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+        <h1 class="text-gray-500 text-xl">Welcome to Dashboard! <span th:text="${name}"></span></h1>
+    </div>
+
+    <div class="mt-4 grid grid-cols-3 gap-4 ">
+        <div class="bg-indigo-100 p-4 rounded-lg bg-white p-6 rounded-lg shadow">
+            <h3 class="text-lg font-semibold">Total Users</h3>
+            <p class="text-2xl" th:text="${totalUsers}"></p>
+        </div>
+        <div class="bg-green-100 p-4 rounded-lg bg-white p-6 rounded-lg shadow">
+            <h3 class="text-lg font-semibold">Total Patients</h3>
+            <p class="text-2xl" th:text="${totalPatients}"></p>
+        </div>
+        <div class="bg-yellow-100 p-4 rounded-lg bg-white p-6 rounded-lg shadow">
+            <h3 class="text-lg font-semibold">Total Prescriptions</h3>
+            <p class="text-2xl" th:text="${totalPrescriptions}"></p>
+        </div>
+    </div>
+</main>
+
+
+</body>
+</html>

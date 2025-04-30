@@ -60,6 +60,11 @@ public class UserServiceImpl implements UserService {
         return userDtoList;
     }
 
+    @Override
+    public List<User> getUsersByRole(String role) {
+        return userRepository.findByRoles_Name(role);
+    }
+
     private Role checkRoleExists() {
         Role role = new Role();
         role.setName("ROLE_USER");
