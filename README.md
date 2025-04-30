@@ -8,6 +8,10 @@ This is a minimal version of a smart healthcare system for small clinics. The sy
 - Patient Portal (Patient)
 - Analytics Dashboard (Admin)
 
+# Live Link
+[https://healthcare-mf3o.onrender.com](https://healthcare-mf3o.onrender.com/login)
+![image](https://github.com/user-attachments/assets/bb0bf4e3-66bf-47c9-8c3c-16b98eaaafbc)
+
 # Compile and Run the Program
 
 ## Prerequisites
