@@ -3,6 +3,7 @@ package com.afikur.healthcare.config;
 import com.afikur.healthcare.dto.UserDetailModel;
 import com.afikur.healthcare.model.User;
 import com.afikur.healthcare.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,7 +22,10 @@ import java.util.Optional;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfiguration {
+
+    private final CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -30,13 +34,16 @@ public class SecurityConfiguration {
                         .requestMatchers("/css/**", "/js/**", "/img/**", "/webjars/**").permitAll()
                         .requestMatchers("/login/**", "/register/**").permitAll()
                         .requestMatchers("/users").hasRole("ADMIN")
+                        .requestMatchers("/doctor/**").hasRole("DOCTOR")
+                        .requestMatchers("/dashboard/**").hasAnyRole("ADMIN", "DOCTOR")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
                         .loginProcessingUrl("/login")
                         .failureUrl("/login?error")
-                        .defaultSuccessUrl("/dashboard")
+                        .successHandler(customAuthenticationSuccessHandler)
+//                        .defaultSuccessUrl("/dashboard", true)
                         .permitAll()
                 )
                 .rememberMe(rememberMe -> rememberMe

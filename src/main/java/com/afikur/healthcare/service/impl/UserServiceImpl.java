@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
         user.setEnabled(true);
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
 
-        Role role = roleRepository.findByName("ROLE_USER");
+        Role role = roleRepository.findByName("ROLE_PATIENT").orElse(null);
 
         if (role == null) {
             role = checkRoleExists();
@@ -60,9 +60,14 @@ public class UserServiceImpl implements UserService {
         return userDtoList;
     }
 
+    @Override
+    public List<User> getUsersByRole(String role) {
+        return userRepository.findByRoles_Name(role);
+    }
+
     private Role checkRoleExists() {
         Role role = new Role();
-        role.setName("ROLE_USER");
+        role.setName("ROLE_PATIENT");
         return roleRepository.save(role);
     }
 }
