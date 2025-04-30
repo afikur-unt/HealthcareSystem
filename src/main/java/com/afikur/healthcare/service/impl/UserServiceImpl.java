@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
         user.setEnabled(true);
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
 
-        Role role = roleRepository.findByName("ROLE_USER");
+        Role role = roleRepository.findByName("ROLE_PATIENT");
 
         if (role == null) {
             role = checkRoleExists();
@@ -67,7 +67,7 @@ public class UserServiceImpl implements UserService {
 
     private Role checkRoleExists() {
         Role role = new Role();
-        role.setName("ROLE_USER");
+        role.setName("ROLE_PATIENT");
         return roleRepository.save(role);
     }
 }
