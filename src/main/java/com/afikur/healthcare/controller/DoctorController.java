@@ -8,6 +8,9 @@ import com.afikur.healthcare.service.PatientService;
 import com.afikur.healthcare.service.PrescriptionService;
 import com.afikur.healthcare.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -86,5 +89,48 @@ public class DoctorController {
 
         prescriptionService.createPrescription(prescription);
         return "redirect:/doctor/prescriptions";
+    }
+
+    @GetMapping("/prescriptions/edit/{id}")
+    public String editPrescription(@PathVariable Long id, Model model) {
+        model.addAttribute("prescription", prescriptionService.getPrescriptionById(id));
+        model.addAttribute("patients", patientService.getAllPatients());
+        return "doctor/prescription-management";
+    }
+
+    @PostMapping("/prescriptions/update")
+    public String updatePrescription(@ModelAttribute Prescription prescription, @RequestParam("medicationNames") List<String> medicationNames, @RequestParam("dosages") List<String> dosages) {
+        Prescription updatedPrescription = new Prescription();
+        updatedPrescription.setPatient(prescription.getPatient());
+        updatedPrescription.setIssuedDate(prescription.getIssuedDate());
+        updatedPrescription.setDoctor(prescription.getDoctor());
+        for (int i = 0; i < medicationNames.size(); i++) {
+            Medication medication = new Medication();
+            medication.setName(medicationNames.get(i));
+            medication.setDosage(dosages.get(i));
+            updatedPrescription.getMedications().add(medication);
+        }
+        prescriptionService.updatePrescription(prescription.getId(), updatedPrescription);
+        return "redirect:/doctor/prescriptions";
+    }
+
+    @GetMapping("/prescriptions/delete/{id}")
+    public String deletePrescription(@PathVariable Long id) {
+        prescriptionService.deletePrescription(id);
+        return "redirect:/doctor/prescriptions";
+    }
+
+
+    @GetMapping("/prescriptions/export/{id}")
+    public ResponseEntity<byte[]> exportPrescriptionToPdf(@PathVariable Long id) {
+        byte[] pdfBytes = prescriptionService.generatePrescriptionPdf(id);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDispositionFormData("attachment", "prescription_" + id + ".pdf");
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(pdfBytes);
     }
 }

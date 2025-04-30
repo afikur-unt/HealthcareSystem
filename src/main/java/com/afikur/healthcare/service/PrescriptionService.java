@@ -10,4 +10,12 @@ public interface PrescriptionService {
     List<Prescription> getPrescriptionsByPatient(Long patientId);
 
     List<Prescription> getAllPrescriptions();
+
+    Prescription getPrescriptionById(Long id);
+
+    Prescription updatePrescription(Long id, Prescription prescriptionDetails);
+
+    void deletePrescription(Long id);
+
+    byte[] generatePrescriptionPdf(Long prescriptionId);
 }
